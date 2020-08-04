@@ -1,0 +1,7 @@
+beautifulsoup4==4.8.2
+lxml==4.4.2
+requests==2.22.0
+schedule==0.6.0
+telepot==12.7
+urllib3==1.25.8
+
