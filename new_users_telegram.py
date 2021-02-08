@@ -1,10 +1,8 @@
 from bs4 import BeautifulSoup 
 import requests,lxml,telepot,datetime,re,schedule,time,csv,os,psycopg2,threading
 
-#bot= telepot.Bot(os.environ['BOT_KEY']) 
-bot=telepot.Bot('1330666160:AAGPt1Kor8Xqz__oFeGVXgfArebUlzvlX90')
-#DATABASE_URL = os.environ['DATABASE_URL']
-DATABASE_URL = 'postgres://jyrhwwwqkxzduy:1849ae52b469cee9a60ad69a503878e473bea88118301a9085d17dab31e0d5ae@ec2-3-231-241-17.compute-1.amazonaws.com:5432/df4lrfh3vh482n'
+bot= telepot.Bot(os.environ['BOT_KEY']) 
+DATABASE_URL = os.environ['DATABASE_URL']
 
 def conect_db():
 
