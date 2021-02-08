@@ -1,34 +1,30 @@
 from bs4 import BeautifulSoup 
-import requests,lxml,telepot,datetime,re,schedule,time,csv,os
+import requests,lxml,telepot,datetime,re,time,csv,os,psycopg2
 
 def bot():
-    bot= telepot.Bot(os.environS['BOT_KEY'])
-    try : 
-        response=bot.getUpdates()
-    except: 
-        bot.deleteWebhook()
-        response=bot.getUpdates()
-    print(response)
-    anterior=[]
+    DATABASE_URL = os.environ['DATABASE_URL']
+    bot= telepot.Bot(os.environ['BOT_KEY'])
+    def conect_db():
+        banco = psycopg2.connect(DATABASE_URL, sslmode='require')
+        cursor=banco.cursor()
+        return banco 
+
+    def get_users(banco):
+        cursor=banco.cursor()
+        cursor.execute("SELECT * from id0")
+        x=cursor.fetchall()
+        x=[list(i)for i in x ]
+        ida=[j for sub in x for j in sub]
+        cursor.close()
+        return ida
+
+    banco=conect_db()
     date=datetime.datetime.now()
     date_today=date.strftime('%d')+'/'+date.strftime('%m')
-
-    with open (r'clientes.txt','r') as fr:
-        for ids in fr: 
-            anterior.append(ids)
-
-    for r in range(len(response)):
-
-        user_id=response[r]
-        user_id=user_id['message']
-        user_text=user_id['text']
-        user_id=user_id['from'] 
-        user_id=user_id['id']
-        user_id=str(user_id)
-        print(user_text)
-
+    anterior = get_users(banco)
+    anterior = [str(i) for i in anterior]
     message=get_message()
-
+    banco.close()
     for k in range (len(anterior)):
         bot.sendMessage(int(anterior[k].rstrip()),message+'\n\n'+"Para parar de receber mensegens digite q ou s")
 
@@ -58,10 +54,4 @@ def get_message():
     for l in range (index_contador,index_contador+4):
         texto=texto+((teste[l]))+','
     return texto
-        
-    message=get_message()
-
-    for k in range (len(anterior)):
-        bot.sendMessage(int(anterior[k].rstrip()),message+'\n\n'+"Para parar de receber mensegens digite q ou s")
-
 bot()
